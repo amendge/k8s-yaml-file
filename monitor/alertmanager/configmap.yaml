@@ -1,0 +1,43 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: alertmanager
+  namespace: kube-system
+data:
+  config.yml: |-
+    global:
+      resolve_timeout: 5m
+      smtp_smarthost: 'smtp.exmail.qq.com:25'
+      smtp_from: 'monitor@vkingcloud.com'
+      smtp_auth_username: 'monitor@vkingcloud.com'
+      smtp_auth_password: 'xxxxxxxxxxx'
+      smtp_require_tls: false
+    templates:
+    - '/etc/alertmanager-templates/*.tmpl'
+
+    route:
+      group_by: ['alertname','instance','service']
+      group_wait: 30s
+      group_interval: 30s
+      repeat_interval: 3h
+      receiver: 'default-receiver'
+      routes:
+      - receiver: email
+        group_wait: 10s
+        match_re:
+          level: warning
+
+    receivers:
+    - name: 'default-receiver'
+      webhook_configs:
+      - url: 'https://dingtalk.vkingcloud.com/dingtalk/ops_dingding/send'
+    - name: 'email'
+      email_configs:
+      - to: 'ops@vkingcloud.com'
+
+    inhibit_rules:
+      - source_match:
+          level: 'disaster'
+        target_match:
+          leve: 'warning'
+        equal: ['alertname', 'instance']

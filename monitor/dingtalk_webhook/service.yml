@@ -1,0 +1,11 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: dingtalk
+  namespace: kube-system
+spec:
+  ports:
+  - port: 8060
+  selector:
+    app: dingtalk

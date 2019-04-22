@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: blackbox-exporter
+  namespace: kube-system
+  annotations:
+    kubernetes.io/ingress.class: public
+spec:
+  rules:
+  - host: blackbox.vkingcloud.com
+    http:
+      paths:
+      - backend:
+          serviceName: blackbox-exporter
+          servicePort: 9115

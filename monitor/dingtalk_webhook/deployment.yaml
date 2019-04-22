@@ -1,0 +1,41 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: dingtalk
+  namespace: kube-system
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dingtalk
+  template:
+    metadata:
+      name: dingtalk
+      labels:
+        app: dingtalk
+    spec:
+      containers:
+      - name: dingtalk
+        image: timonwong/prometheus-webhook-dingtalk:latest
+        resources:
+          limits:
+            cpu: 150m
+            memory: 150Mi
+          requests:
+            cpu: 150m
+            memory: 150Mi
+        args:
+          - '--ding.profile=ops_dingding=https://oapi.dingtalk.com/robot/send?access_token=0be34beea3014e2124d7dbfe13746819c8c95799eb66f91dbe1c969c80ed7510'
+          - '--log.level=info'
+          - '--template.file=/etc/dingtalk/default.tmpl'
+        ports:
+        - name: dingtalk
+          containerPort: 8060
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/dingtalk
+      serviceAccountName: prometheus
+      volumes:
+      - name: config-volume
+        configMap:
+          name: dingtalk-webhook-config

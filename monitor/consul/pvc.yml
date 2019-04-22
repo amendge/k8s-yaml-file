@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: consul01-nas
+  namespace: monitor
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: consul
+  volumeName: consul01-nas
+status:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 2Gi
+

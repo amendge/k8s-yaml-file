@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: consul-01-nas
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+   storage: 10Gi
+  nfs:
+    path: /monitor/consul01
+    server: 10.0.100.48
+  storageClassName: cbs
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: consul-02-nas
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 10Gi
+  nfs:
+    path: /monitor/consul02
+    server: 10.0.100.48
+  storageClassName: cbs 
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: consul-03-nas
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 10Gi
+  nfs:
+    path: /monitor/consul03
+    server: 10.0.100.48
+  storageClassName: cbs 
