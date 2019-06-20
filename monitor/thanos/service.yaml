@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: thanos
+  name: thanos
+  namespace: monitoring
+spec:
+  selector:
+    app: thanos
+  ports:
+  - port: 19391

@@ -1,0 +1,49 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: thanos
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: thanos
+  template:
+    metadata:
+      name: thanos
+      labels:
+        app: thanos
+    spec:
+      containers:
+      - name: thanos
+        image: gecailong/thanos:v0.2.1
+        resources:
+          limits:
+            cpu: 150m
+            memory: 150Mi
+          requests:
+            cpu: 150m
+            memory: 150Mi
+        command:
+        - "/bin/thanos"
+        args:
+          - 'sidecar'
+          - '--objstore.config-file=/etc/bucket.yaml'
+          - '--prometheus.url=http://prometheus.monitoring:9090'
+          - '--log.level=info'
+          - '--cluster.address=0.0.0.0:19391'
+          - '--cluster.peers=xxxxxxxxxxxxxxx:19291'
+        ports:
+        - name: http
+          containerPort: 10902
+        - name: grpc
+          containerPort: 10901
+        - name: advertise
+          containerPort: 19391
+        volumeMounts:
+        - name: data
+          mountPath: /data
+      serviceAccountName: prometheus
+      volumes:
+      - name: data
+        emptyDir: {}

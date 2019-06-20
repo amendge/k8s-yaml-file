@@ -1,0 +1,8 @@
+FROM ubuntu:latest
+MAINTAINER  amend
+
+RUN apt-get -yqq update  && apt-get clean
+ADD ./bucket.yaml /etc
+ADD ./thanos /bin
+
+CMD ["/bin/thanos","sidecar","--objstore.config-file=/etc/bucket.yaml","--prometheus.url=http://prometheus.monitoring:9090","--cluster.address=0.0.0.0:19391","--cluster.peers=172.21.161.116:19291"]
