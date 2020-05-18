@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logstash
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logstash
+  template:
+    metadata:
+      name: logstash
+      labels:
+        app: logstash
+    spec:
+      containers:
+      - name: logstash
+        image: gecailong/logstash:6.3.0
+        env:
+        - name: xpack.monitoring.elasticsearch.url
+          value: "http://10.100.91.18:9202"
+        - name: TZ
+          value: Asia/Shanghai
+        volumeMounts:
+          - name: workdir01
+            mountPath: /usr/share/logstash/conf.d
+      volumes:
+        - name: workdir01
+          configMap:
+            name: logstash-conf
+      nodeSelector:
+          logstash: test
