@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    vmstorage: online
+  name: monitor-vmstorage
+spec:
+#  clusterIP: None
+  ports:
+  - name: http
+    port: 8482
+    protocol: TCP
+    targetPort: http
+  - name: vmselect
+    port: 8401
+    protocol: TCP
+    targetPort: vmselect
+  - name: vminsert
+    port: 8400
+    protocol: TCP
+    targetPort: vminsert
+  selector:
+    vmstorage: online
